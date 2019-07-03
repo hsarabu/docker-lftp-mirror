@@ -22,7 +22,6 @@ mkdir -p /config/.download
 # cycle every minute
 while true
 do
-	echo "[$(date '+%H:%M:%S')] Created lock file."		
 	echo "[$(date '+%H:%M:%S')] Initiating connection to $host using sftp"	
 	
 	lftp -u $USERNAME,$PASSWORD $HOST << EOF
@@ -43,7 +42,7 @@ EOF
 EOF
 		echo "[$(date '+%H:%M:%S')] Setting permission..."
 		chmod -R 777 /config/.download
-		mv /config/.download/* $FINISHED_DIR	
+		mv -v /config/.download/* "$FINISHED_DIR"
 		echo "[$(date '+%H:%M:%S')] Finished moving files..."	
 	done
 	
