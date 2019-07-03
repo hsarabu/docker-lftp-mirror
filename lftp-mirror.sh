@@ -40,9 +40,9 @@ do
 	else
 		touch "$LOCK_FILE"
 		echo "[$(date '+%H:%M:%S')] Created lock file."		
-		echo "[$(date '+%H:%M:%S')] Initiating connection to $host using sftp"	
+		echo "[$(date '+%H:%M:%S')] Initiating connection to $HOST using sftp"	
 		
-		lftp -u $USERNAME,$PASSWORD $HOST << EOF
+		lftp -u "$USERNAME","$PASSWORD" "$HOST" << EOF
 			set sftp:auto-confirm yes
 			set mirror:use-pget-n $LFTP_PARTS
 			set net:connection-limit 50
@@ -59,17 +59,20 @@ EOF
 				rm -f "$LOCK_FILE"
 				trap - SIGINT SIGTERM	
 			else				
-				lftp -u $USERNAME,$PASSWORD $HOST << EOF
+				lftp -u "$USERNAME","$PASSWORD" "$HOST" << EOF
 					set sftp:auto-confirm yes
 					command  rm "$REMOTE_DIR/${file##*/}"     	
-EOF				
-				echo "[$(date '+%H:%M:%S')] Moving files off Sync to Download folder."	
-				chmod -R 777 "${/config/.download}/${file##*}"
-				mv "${/config/.download}/${file##*/}" "$FINISHED_DIR"				
-			fi
+EOF
+
+                                echo "[$(date '+%H:%M:%S')] Moving files off Sync to Download folder."
+				chmod -R 777 /config/.download/*
+				mv "${/config/.download}/${file##*/}" "$FINISHED_DIR"	
+			fi			
+			
+			rm -f "$LOCK_FILE"
+			trap - SIGINT SIGTERM
 		done
-		rm -f "$LOCK_FILE"
-		trap - SIGINT SIGTERM		
+		
 	fi
 		# Repeat process after one minute
 		echo "[$(date '+%H:%M:%S')] Sleeping for 1 minute"
