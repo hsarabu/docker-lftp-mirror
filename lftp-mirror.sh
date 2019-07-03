@@ -1,8 +1,6 @@
 #!/bin/sh
-
 # Display variables for troubleshooting
 echo -e "Variables set:\\n\
-
 PUID=${PUID}\\n\
 PGID=${PGID}\\n\
 HOST=${HOST}\\n\
@@ -51,7 +49,7 @@ do
 			set xfer:use-temp-file yes
 			set pget:save-status never
 			mirror -v -P$LFTP_FILES --log="/config/$BASE_NAME.log" $REMOTE_DIR /config/.download    
-		EOF
+EOF
 	 
 		for file in /config/.download/*; do				
 			if [ "$REMOTE_DIR/*" = "${REMOTE_DIR}/${file##*/}" ]; then
@@ -63,7 +61,7 @@ do
 				lftp -u $USERNAME,$PASSWORD $HOST << EOF
 					set sftp:auto-confirm yes
 					command  rm "${remote_dir}/${file##*/}"     	
-				EOF
+EOF
 				
 				echo "[$(date '+%H:%M:%S')] Moving files off Sync to Download folder."
 				chmod -R 777 /config/.download/*
