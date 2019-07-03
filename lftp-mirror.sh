@@ -64,9 +64,11 @@ EOF
 					command  rm "$REMOTE_DIR/${file##*/}"     	
 EOF
 
-                                echo "[$(date '+%H:%M:%S')] Moving files off Sync to Download folder."
-				chmod -R 777 /config/.download/*
+                                echo "[$(date '+%H:%M:%S')] Moving ${/config/.download}/${file##*/}"
+				chmod -R 777 "${/config/.download}/${file##*/}"
+			        echo "[$(date '+%H:%M:%S')] Set permision for ${/config/.download}/${file##*/}"
 				mv "${/config/.download}/${file##*/}" "$FINISHED_DIR"	
+				echo "[$(date '+%H:%M:%S')] Moved ${/config/.download}/${file##*/}"
 			fi			
 			
 			rm -f "$LOCK_FILE"
