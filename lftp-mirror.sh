@@ -75,9 +75,7 @@ EOF
 fi
 	echo "[$(date '+%H:%M:%S')] Moving files off Sync to Download folder."
 	chmod -R 777 /config/.download/*
-	mv "${/config/.download}/${file##*/}" "$FINISHED_DIR"	
-	done
-		
+	mv "${/config/.download}/${file##*/}" "$FINISHED_DIR"		
     rm -f "$LOCK_FILE"
     trap - SIGINT SIGTERM		
 fi
