@@ -40,9 +40,9 @@ do
 	else
 		touch "$LOCK_FILE"
 		echo "[$(date '+%H:%M:%S')] Created lock file."		
-		echo "[$(date '+%H:%M:%S')] Initiating connection to $HOST using sftp"	
+		echo "[$(date '+%H:%M:%S')] Initiating connection to $host using sftp"	
 		
-		lftp -u "$USERNAME","$PASSWORD" "$HOST" << EOF
+		lftp -u $USERNAME,$PASSWORD $HOST << EOF
 			set sftp:auto-confirm yes
 			set mirror:use-pget-n $LFTP_PARTS
 			set net:connection-limit 50
@@ -55,20 +55,15 @@ EOF
 	 
 		for file in /config/.download/*; do				
 			if [ "$REMOTE_DIR/*" = "${REMOTE_DIR}/${file##*/}" ]; then
-				echo "[$(date '+%H:%M:%S')] No files were synchronized."
-				rm -f "$LOCK_FILE"
-				trap - SIGINT SIGTERM	
+				echo "[$(date '+%H:%M:%S')] No files were synchronized."				
 			else				
-				lftp -u "$USERNAME","$PASSWORD" "$HOST" << EOF
+				lftp -u $USERNAME,$PASSWORD $HOST << EOF
 					set sftp:auto-confirm yes
 					command  rm "$REMOTE_DIR/${file##*/}"     	
-EOF
-
-                                echo "[$(date '+%H:%M:%S')] Moving ${/config/.download}/${file##*/}"
-				chmod -R 777 "${/config/.download}/${file##*/}"
-			        echo "[$(date '+%H:%M:%S')] Set permision for ${/config/.download}/${file##*/}"
+EOF				
+				echo "[$(date '+%H:%M:%S')] Moving files off Sync to Download folder."
+				chmod -R 777 /config/.download/*
 				mv "${/config/.download}/${file##*/}" "$FINISHED_DIR"	
-				echo "[$(date '+%H:%M:%S')] Moved ${/config/.download}/${file##*/}"
 			fi			
 			
 			rm -f "$LOCK_FILE"
