@@ -2,6 +2,7 @@
 
 # Display variables for troubleshooting
 echo -e "Variables set:\\n\
+
 PUID=${PUID}\\n\
 PGID=${PGID}\\n\
 
@@ -40,7 +41,6 @@ trap "rm -f $LOCK_FILE" SIGINT SIGTERM
 if [[ -e "$LOCK_FILE" ]]
 then
     echo "[$(date '+%H:%M:%S')] $BASE_NAME is running already."
-    exit
 else
     touch "$LOCK_FILE"
 	echo "[$(date '+%H:%M:%S')] Created lock file."
@@ -64,14 +64,12 @@ for file in /config/.download/*; do
 	if [ "$REMOTE_DIR/*" = "${REMOTE_DIR}/${file##*/}" ]; then
 		echo "[$(date '+%H:%M:%S')] No files were synchronized."
 		rm -f "$LOCK_FILE"
-		trap - SIGINT SIGTERM			
-		exit
-	else
-	
-	echo "[$(date '+%H:%M:%S')] Transfers are completed... !"
-    lftp -u $USERNAME,$PASSWORD $HOST << EOF
-    set sftp:auto-confirm yes
-    command  rm "${remote_dir}/${file##*/}" 
+		trap - SIGINT SIGTERM	
+	else	
+		echo "[$(date '+%H:%M:%S')] Transfers are completed... !"
+		lftp -u $USERNAME,$PASSWORD $HOST << EOF
+		set sftp:auto-confirm yes
+		command  rm "${remote_dir}/${file##*/}" 
     quit	
 EOF
 fi
@@ -82,7 +80,6 @@ fi
 		
     rm -f "$LOCK_FILE"
     trap - SIGINT SIGTERM		
-    exit
 fi
     # Repeat process after one minute
     echo "[$(date '+%H:%M:%S')] Sleeping for 1 minute"
