@@ -66,7 +66,6 @@ for file in /config/.download/*; do
 		rm -f "$LOCK_FILE"
 		trap - SIGINT SIGTERM			
 		exit
-	fi
 	else
 	
 	echo "[$(date '+%H:%M:%S')] Transfers are completed... !"
@@ -75,7 +74,7 @@ for file in /config/.download/*; do
     command  rm "${remote_dir}/${file##*/}" 
     quit	
 EOF
-endif
+fi
 	echo "[$(date '+%H:%M:%S')] Moving files off Sync to Download folder."
 	chmod -R 777 /config/.download/*
 	mv "${/config/.download}/${file##*/}" "$FINISHED_DIR"	
