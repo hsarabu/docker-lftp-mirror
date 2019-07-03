@@ -33,16 +33,17 @@ do
 		set xfer:eta-period 5 
 		set xfer:use-temp-file yes
 		set pget:save-status never
-		mirror -v -P$LFTP_FILES --log="/config/$BASE_NAME.log" $REMOTE_DIR /config/.download    
+		mirror -v -P$LFTP_FILES --log="/config/$BASE_NAME.log" $REMOTE_DIR /config/.download
 EOF
 	 
 	for file in /config/.download/*; do				
 		lftp -u $USERNAME,$PASSWORD $HOST << EOF
 			set sftp:auto-confirm yes
-			command  rm "$REMOTE_DIR/${file##*/}"     	
+			command  rm "$REMOTE_DIR/${file##*/}"
 EOF
 		echo "[$(date '+%H:%M:%S')] Setting permission..."
-		chmod -R 777 "${/config/.download}/${file##*/}"
+		chmod -R 777 /config/.download
+		mv /config/.download $FINISHED_DIR	
 		echo "[$(date '+%H:%M:%S')] Finished moving files..."	
 	done
 	
