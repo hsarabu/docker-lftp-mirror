@@ -1,6 +1,8 @@
 #!/bin/sh
+
 # Display variables for troubleshooting
 echo -e "Variables set:\\n\
+
 PUID=${PUID}\\n\
 PGID=${PGID}\\n\
 HOST=${HOST}\\n\
@@ -56,22 +58,18 @@ EOF
 				echo "[$(date '+%H:%M:%S')] No files were synchronized."
 				rm -f "$LOCK_FILE"
 				trap - SIGINT SIGTERM	
-			else	
-				echo "[$(date '+%H:%M:%S')] Transfers are completed... !"
+			else				
 				lftp -u $USERNAME,$PASSWORD $HOST << EOF
 					set sftp:auto-confirm yes
-					command  rm "${remote_dir}/${file##*/}"     	
-EOF
-				
-				echo "[$(date '+%H:%M:%S')] Moving files off Sync to Download folder."
-				chmod -R 777 /config/.download/*
-				mv "${/config/.download}/${file##*/}" "$FINISHED_DIR"	
-			fi			
-			
-			rm -f "$LOCK_FILE"
-			trap - SIGINT SIGTERM
+					command  rm "$REMOTE_DIR/${file##*/}"     	
+EOF				
+				echo "[$(date '+%H:%M:%S')] Moving files off Sync to Download folder."	
+				chmod -R 777 "${/config/.download}/${file##*}"
+				mv "${/config/.download}/${file##*/}" "$FINISHED_DIR"				
+			fi
 		done
-		
+		rm -f "$LOCK_FILE"
+		trap - SIGINT SIGTERM		
 	fi
 		# Repeat process after one minute
 		echo "[$(date '+%H:%M:%S')] Sleeping for 1 minute"
