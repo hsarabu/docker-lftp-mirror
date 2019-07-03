@@ -43,7 +43,7 @@ EOF
 EOF
 		echo "[$(date '+%H:%M:%S')] Setting permission..."
 		chmod -R 777 /config/.download
-		mv /config/.download $FINISHED_DIR	
+		mv /config/.download/* $FINISHED_DIR	
 		echo "[$(date '+%H:%M:%S')] Finished moving files..."	
 	done
 	
