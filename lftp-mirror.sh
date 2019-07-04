@@ -38,7 +38,7 @@ EOF
 	for file in /config/.download/*; do				
 		lftp -u $USERNAME,$PASSWORD $HOST << EOF
 			set sftp:auto-confirm yes
-			command  rm "$REMOTE_DIR/${file##*/}"
+			command  rm -rf "$REMOTE_DIR/${file##*/}"
 EOF
 		echo "[$(date '+%H:%M:%S')] Setting permission..."
 		chmod -R 777 /config/.download
