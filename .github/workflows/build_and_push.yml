@@ -27,4 +27,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: hsarabu/lftp-sync:latest
+          tags: ghcr.io/hsarabu/lftp-sync:latest
