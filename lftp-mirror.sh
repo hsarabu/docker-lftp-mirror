@@ -49,6 +49,7 @@ EOF
 	
 # Repeat process after one minute
 echo "[$(date '+%H:%M:%S')] Sleeping for 1 minute"
-sleep 1m
+sleep 1m &
+wait
 
 done
