@@ -17,12 +17,13 @@ echo "[$(date '+%H:%M:%S')] Starting up syncing"
 
 # create a directory for active downloads
 mkdir -p /config/.download
+trap exit SIGINT
 
 # cycle every minute
 while true
 do
 	echo "[$(date '+%H:%M:%S')] Initiating connection to $host using sftp"	
-	
+
 	lftp -u $USERNAME,$PASSWORD $HOST << EOF
 		set sftp:auto-confirm yes
 		set mirror:use-pget-n $LFTP_PARTS
