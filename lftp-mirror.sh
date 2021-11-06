@@ -17,7 +17,7 @@ echo "[$(date '+%H:%M:%S')] Starting up syncing"
 
 # create a directory for active downloads
 mkdir -p /config/.download
-trap exit SIGINT
+trap "rm -rf /config/.download" EXIT
 
 # cycle every minute
 while true
