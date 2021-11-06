@@ -13,8 +13,7 @@ FINISHED_DIR=${FINISHED_DIR}\\n\
 LFTP_PARTS=${LFTP_PARTS}\\n\
 LFTP_FILES=${LFTP_FILES}\\n"
 
-echo "[$(date '+%H:%M:%S')] Starting up Synching"
-echo "[$(date '+%H:%M:%S')] using lftp by Alexander V. Lukyanov (lftp.yar.ru)".
+echo "[$(date '+%H:%M:%S')] Starting up syncing"
 
 # create a directory for active downloads
 mkdir -p /config/.download
@@ -32,6 +31,7 @@ do
 		set xfer:eta-period 5 
 		set xfer:use-temp-file yes
 		set pget:save-status never
+		set ssl:verify-certificate false
 		mirror -v -P$LFTP_FILES --log="/config/$BASE_NAME.log" $REMOTE_DIR /config/.download
 EOF
 	 
